@@ -63,25 +63,77 @@ user['age'] = 12;
 const key = 'name';
 user[key] = 'Maciej';
 
-console.log(user);
+// const getAuthorsDictionary = booksArray => {
+//     const authorsWithBooks = {};
+//
+//     booksArray.forEach(book => {
+//         const author = book.author;
+//         const booksForCurrentAuthor = authorsWithBooks[author];
+//
+//         // authorsWithBooks[author] = booksForCurrentAuthor ? [...authorsWithBooks[author], book] : [book];
+//
+//         if (booksForCurrentAuthor) {
+//             authorsWithBooks[author].push(book)
+//         } else {
+//             authorsWithBooks[author] = [];
+//             authorsWithBooks[author].push(book);
+//         }
+//     });
+//     return authorsWithBooks;
+// };
 
-const getAuthorsDictionary = booksArray => {
-    const authorsWithBooks = {};
+// solution with reduce
+// const getAuthorsDictionary = (booksArray) => {
+//     return booksArray.reduce((acc, book) => {
+//         const {author} = book;
+//         acc[author] = acc[author] ? [...acc[author], book] : [book];
+//         return acc;
+//     }, {});
+// }
 
-    booksArray.forEach(book => {
-        // console.log('book', book);
-        const author = book.author;
-        const booksForCurrentAuthor = authorsWithBooks[author];
+// solution with map
 
-        if(booksForCurrentAuthor) {
-            authorsWithBooks[author].push(book)
+// const getAuthorsDictionary = booksArray => {
+//     const authorsMap = new Map();
+//
+//     booksArray.forEach(book => {
+//         const author = book.author;
+//         if (!authorsMap.has(author)) {
+//             authorsMap.set(author, [book]);
+//         } else {
+//             authorsMap.get(author).push(book);
+//         }
+//     })
+//     return authorsMap;
+// }
+
+// solution without mutation - for React applications
+
+// const getAuthorsDictionary = (bookArray) => {
+//     const authorsMap = new Map();
+//
+//     bookArray.forEach((book) => {
+//         const author = book.author;
+//         authorsMap.set(author, [ ...(authorsMap.get(author) || []), book ]);
+//     });
+//
+//     return authorsMap;
+// };
+
+// solution with for loop
+
+const getAuthorsDictionary = (booksArray) => {
+    const authorsDict = {};
+    for (const book of booksArray) {
+        const {author} = book;
+        if(!(author in authorsDict)) {
+            authorsDict[author] = [book]
         } else {
-            authorsWithBooks[author] = [];
-            authorsWithBooks[author].push(book);
+            authorsDict[author].push(book)
         }
-    });
-    return authorsWithBooks;
-};
+    }
+    return authorsDict;
+}
 
 const books = [
     {
@@ -212,59 +264,7 @@ const books = [
     },
 ];
 
-// console.log(books[1].pages)
+// const getAuthorsDictionary = Object.groupBy(books,book => book.author);
+
 // console.log(getTotalNumberOfPages(books));
 console.log(getAuthorsDictionary(books));
-
-const myFavouriteBooks = [
-    {
-        title: 'The Hobbit',
-        author: 'J.R.R. Tolkien',
-        genre: 'Fantasy',
-        pages: 310,
-    },
-    {
-        title: '1984',
-        author: 'George Orwell',
-        genre: 'Dystopian',
-        pages: 328,
-    },
-    {
-        title: 'Harry Potter and the Chamber of Secrets',
-        author: 'J.K. Rowling',
-        genre: 'Fantasy',
-        pages: 341,
-    },
-    {
-        title: 'Harry Potter and the Prisoner of Azkaban',
-        author: 'J.K. Rowling',
-        genre: 'Fantasy',
-        pages: 435,
-    },
-    {
-        title: 'Animal Farm',
-        author: 'George Orwell',
-        genre: 'Dystopian',
-        pages: 112,
-    },
-    {
-        title: 'The Silmarillion',
-        author: 'J.R.R. Tolkien',
-        genre: 'Fantasy',
-        pages: 365,
-    },
-    {
-        title: 'Harry Potter and the Order of the Phoenix',
-        author: 'J.K. Rowling',
-        genre: 'Fantasy',
-        pages: 766,
-    },
-    {
-        title: 'The Fellowship of the Ring',
-        author: 'J.R.R. Tolkien',
-        genre: 'Fantasy',
-        pages: 423,
-    },
-];
-
-// console.log(getGenreFantasy(myFavouriteBooks));
