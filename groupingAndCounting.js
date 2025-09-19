@@ -129,8 +129,8 @@ const books = [
 
 // 1. groupByGenre: zgrupuj książki po genre. (Object vs Map of arrays)
 
-// const getBooksByGenre = Object.groupBy(books, book => book.genre);
-// console.log(getBooksByGenre);
+const getBooksByGenre = Object.groupBy(books, book => book.genre);
+console.log(getBooksByGenre);
 
 const getBooksByGenre = (booksArray) => {
     const groupedByGenreDictionary = {};
@@ -148,23 +148,23 @@ console.log(getBooksByGenre(books));
 
 // 2. countByAuthor: policz ile książek ma każdy author. (licznik)
 
-// const getNumberOfBooksPerAuthor = (booksArray) => {
-//     const booksGroupedByAuthor =  Object.groupBy(books, book => book.author);
-//     return Object.fromEntries(
-//         Object.entries(booksGroupedByAuthor).map(([author, books]) => [author, books.length])
-//     )
-// }
-// console.log(getNumberOfBooksPerAuthor(books))
+const getNumberOfBooksPerAuthor = (booksArray) => {
+    const booksGroupedByAuthor =  Object.groupBy(books, book => book.author);
+    return Object.fromEntries(
+        Object.entries(booksGroupedByAuthor).map(([author, books]) => [author, books.length])
+    )
+}
+console.log(getNumberOfBooksPerAuthor(books))
 
-// const getNumberOfBooksPerAuthor = (booksArray) => {
-//     return booksArray.reduce((acc, book) => {
-//         const {author} = book;
-//         acc[author] = (acc[author] ?? 0) + 1;
-//
-//         return acc;
-//     }, {});
-// }
-// console.log(getNumberOfBooksPerAuthor(books))
+const getNumberOfBooksPerAuthor = (booksArray) => {
+    return booksArray.reduce((authorsDict, book) => {
+        const {author} = book;
+        authorsDict[author] = (authorsDict[author] ?? 0) + 1;
+
+        return authorsDict;
+    }, {});
+}
+console.log(getNumberOfBooksPerAuthor(books))
 
 const getNumberOfBooksPerAuthor = (booksArray) => {
     const numberOfBooksPerAuthorDict = {};
@@ -181,3 +181,100 @@ const getNumberOfBooksPerAuthor = (booksArray) => {
     return numberOfBooksPerAuthorDict;
 }
 console.log(getNumberOfBooksPerAuthor(books))
+
+const getNumberOfBooksPerAuthor = (booksArray) => {
+    const authorsMap = new Map();
+
+    booksArray.forEach((book) => {
+        const {author} = book;
+        authorsMap.set(author, (authorsMap.get(author) ?? 0) + 1)
+    })
+    return authorsMap;
+}
+
+
+// 3. sumPagesByGenre: suma pages dla każdego genre. (akumulacja)
+
+// forEach with dictionary
+const getSumOfPagesByGenre = (booksArray) => {
+    const getGenreDict = {};
+
+    booksArray.forEach((book) => {
+        const {genre, pages} = book;
+
+        getGenreDict[genre] = (getGenreDict[genre] ?? 0) + pages;
+    })
+    return getGenreDict;
+}
+
+// reduce
+
+const getSumOfPagesByGenre = (booksArray) => {
+    return booksArray.reduce((sumOfPages, book) => {
+        const {genre, pages} = book;
+        sumOfPages[genre] = (sumOfPages[genre] ?? 0) + pages;
+        return sumOfPages;
+    }, {});
+}
+
+// forEach with Map()
+
+const getSumOfPagesByGenre = (booksArray) => {
+    const pagesForGenreMap = new Map();
+
+    booksArray.forEach((book) => {
+        const {genre, pages} = book;
+        pagesForGenreMap.set(genre, (pagesForGenreMap.get(genre) ?? 0) + pages);
+    })
+    return pagesForGenreMap;
+}
+
+// Object.groupBy
+
+const getSumOfPagesByGenre = (booksArray) => {
+    const groupedBooksBygenre =  Object.groupBy(booksArray, book => book.genre);
+    return Object.fromEntries(
+        Object.entries(groupedBooksBygenre).map(([genre, books]) => [
+            genre,
+            books.reduce((sumOfPages, book) => {
+                sumOfPages += book.pages;
+                return sumOfPages;
+            }, 0)])
+    );
+}
+
+
+// 4. uniqueAuthorsByGenre: dla każdego genre lista unikalnych autorów. (Set w środku)
+
+// dictionary with Set
+const uniqueAuthorsByGenre = (booksArray) => {
+    const genreDict = {};
+
+    booksArray.forEach((book) => {
+        const {genre, author} = book;
+        if (!genreDict[genre]) {
+            genreDict[genre] = new Set();
+        }
+        genreDict[genre].add(author)
+    })
+
+    Object.keys(genreDict).forEach((genre) => {
+        genreDict[genre] = [...genreDict[genre]]
+    })
+
+    return genreDict;
+}
+
+// Map with set
+
+// groupBy
+
+const uniqueAuthorsByGenre = (booksArray) => {
+    const groupedBooksByGenre =  Object.groupBy(booksArray, book => book.genre);
+    return Object.fromEntries(
+        Object.entries(groupedBooksByGenre).map(([genre, books]) => [
+            genre,
+            [...new Set(books.map(book => book.author))]
+        ])
+    );
+}

@@ -84,10 +84,10 @@ user[key] = 'Maciej';
 
 // solution with reduce
 // const getAuthorsDictionary = (booksArray) => {
-//     return booksArray.reduce((acc, book) => {
+//     return booksArray.reduce((authorsDict, book) => {
 //         const {author} = book;
-//         acc[author] = acc[author] ? [...acc[author], book] : [book];
-//         return acc;
+//         authorsDict[author] = authorsDict[author] ? [...authorsDict[author], book] : [book];
+//         return authorsDict;
 //     }, {});
 // }
 
@@ -133,6 +133,10 @@ const getAuthorsDictionary = (booksArray) => {
         }
     }
     return authorsDict;
+}
+
+const getBooksGroupedByAuthor = (booksArray) => {
+    return Object.groupBy(booksArray, book => book.author)
 }
 
 const books = [
@@ -264,7 +268,3 @@ const books = [
     },
 ];
 
-// const getAuthorsDictionary = Object.groupBy(books,book => book.author);
-
-// console.log(getTotalNumberOfPages(books));
-console.log(getAuthorsDictionary(books));
