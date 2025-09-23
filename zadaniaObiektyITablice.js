@@ -100,3 +100,126 @@ function groupByAge(peopleArray) {
 }
 
 console.log(groupByAge(people))
+
+/*
+    5. Anagramy
+    Napisz funkcję areAnagrams(word1, word2), która sprawdzi, czy dwa słowa są anagramami (mają te same litery w tej samej liczbie).
+     Do tego użyj słownika, aby policzyć wystąpienia liter.
+     Przykład:
+    areAnagrams("listen", "silent"); // true
+    areAnagrams("kot", "tok"); // true
+    areAnagrams("kot", "pies"); // false
+ */
+
+function areAnagrams(word1, word2) {
+    wordCountDict = {};
+    for (const letter of word1) {
+        if (!wordCountDict[letter]) {
+            wordCountDict[letter] = 1;
+        } else {
+            wordCountDict[letter] += 1;
+        }
+    }
+    for (const letter of word2) {
+        if (!wordCountDict[letter]) {
+            return false;
+        } else {
+            wordCountDict[letter] -= 1;
+        }
+    }
+    const sum = Object.values(wordCountDict).reduce((sum, val) => sum + val, 0);
+    if (!sum) {
+        return true;
+    }
+}
+
+// function areAnagrams(word1, word2) {
+//     if (word1.length !== word2.length) return false;
+//     return word1.split("").sort().join("") === word2.split("").sort().join("");
+// }
+
+
+areAnagrams("listen", "silent")
+areAnagrams("kot", "tok");
+areAnagrams("kot", "pies");
+
+/*
+    6. Najczęściej używany znak
+    Napisz funkcję mostFrequentChar(str), która zwróci znak najczęściej występujący w napisie (użyj słownika do zliczania).
+     Przykład:
+    mostFrequentChar("programowanie");
+// "a"
+ */
+
+function mostFrequentChar(str) {
+    const charDict = {};
+    for (const char of str) {
+        charDict[char] = (charDict[char] || 0) + 1;
+    }
+    let maxChar = null;
+    let maxCount = 0;
+
+    for (const char in charDict) {
+        const count = charDict[char];
+        if (count > maxCount) {
+            maxCount = count;
+            maxChar = char;
+        }
+    }
+    return maxChar;
+}
+
+// function mostFrequentChar(str) {
+//     const charDict = {};
+//     for (const char of str) {
+//         charDict[char] = (charDict[char] || 0) + 1;
+//     }
+//
+//     const maxCount = Math.max(...Object.values(charDict));
+//
+//     const winners = Object.keys(charDict).filter(char => charDict[char] === maxCount);
+//
+//     return { chars: winners, count: maxCount };
+// }
+//
+// console.log(mostFrequentChar("programowanie"));
+// // { chars: [ "r", "a" ], count: 3 }
+
+
+/*
+7. Indeksowanie produktów
+Masz tablicę produktów:
+const products = [
+  { id: 1, name: "Mleko" },
+  { id: 2, name: "Chleb" },
+  { id: 3, name: "Masło" }
+];
+
+Napisz funkcję indexProducts(products), która zwróci obiekt/dictionary, gdzie kluczem będzie id, a wartością cały obiekt produktu.
+ Przykład:
+indexProducts(products);
+// {
+//   1: { id: 1, name: "Mleko" },
+//   2: { id: 2, name: "Chleb" },
+//   3: { id: 3, name: "Masło" }
+// }
+
+ */
+
+const products = [
+    { id: 1, name: "Mleko" },
+    { id: 2, name: "Chleb" },
+    { id: 3, name: "Masło" }
+];
+
+function indexProducts(productsArray) {
+    const productsDict = {};
+
+    for (product of productsArray) {
+        const {id} = product;
+        productsDict[id] = product
+    }
+    return productsDict
+}
+
+console.log(indexProducts(products));
